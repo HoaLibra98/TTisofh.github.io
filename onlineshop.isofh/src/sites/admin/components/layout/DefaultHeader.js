@@ -1,32 +1,32 @@
-import React from 'react';
-import { AppSidebarToggler } from '@coreui/react';
-import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
+import React from 'react'
+import { AppSidebarToggler } from '@coreui/react'
+import PropTypes from 'prop-types'
+import AppBar from '@material-ui/core/AppBar'
+import Toolbar from '@material-ui/core/Toolbar'
+import IconButton from '@material-ui/core/IconButton'
+import Typography from '@material-ui/core/Typography'
 // import Badge from '@material-ui/core/Badge';
-import MenuItem from '@material-ui/core/MenuItem';
-import Menu from '@material-ui/core/Menu';
-import { fade } from '@material-ui/core/styles/colorManipulator';
-import { withStyles } from '@material-ui/core/styles';
-import MenuIcon from '@material-ui/icons/Menu';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import MenuItem from '@material-ui/core/MenuItem'
+import Menu from '@material-ui/core/Menu'
+import { fade } from '@material-ui/core/styles/colorManipulator'
+import { withStyles } from '@material-ui/core/styles'
+import MenuIcon from '@material-ui/icons/Menu'
+import AccountCircle from '@material-ui/icons/AccountCircle'
+import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 // import MailIcon from '@material-ui/icons/Mail';
 // import NotificationsIcon from '@material-ui/icons/Notifications';
-import MoreIcon from '@material-ui/icons/MoreVert';
-import { connect } from 'react-redux';
+import MoreIcon from '@material-ui/icons/MoreVert'
+import { connect } from 'react-redux'
 // import { Redirect, Link } from 'react-router-dom'
-import constants from '../../../../resources/strings';
+import constants from '../../../../resources/strings'
 class PrimarySearchAppBar extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
     this.state = {
       anchorEl: null,
       mobileMoreAnchorEl: null,
       userAvatar: ''
-    };
+    }
   }
   // componentWillMount() {
   //   this.getDetail();
@@ -60,271 +60,141 @@ class PrimarySearchAppBar extends React.Component {
 
   // }
   handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    this.setState({ anchorEl: event.currentTarget })
+  }
 
-  handleProfile() {
+  handleProfile () {
     // this.handleMenuClose();
-    window.location.href = '/admin/user-info';
+    window.location.href = '/admin/user-info'
   }
 
   handlelogOut = event => {
     // let param = JSON.parse(localStorage.getItem('isofh'));
     // localStorage.clear()
-    localStorage.removeItem("_" + constants.key.storage.current_account_login);
-    localStorage.removeItem("_" + constants.key.storage.current_account);
-    window.location.href = '/dang-nhap';
-
-    // let id = (this.props.userApp.currentUser || {}).id;
-    // userProvider.logout(id).then(s => {
-    //   if (s && s.data && s.code === 0) {
-    // localStorage.clear()
-    // window.location.reload()
-    // window.location.href = '/dang-nhap';
-    // var logedin = localStorage.getItem('isofh')
-    // if(!logedin) {
-    //   this.props.history.push("/login");
-    // }
-    //   } else {
-    //     alert(s.message)
-    //   }
-    // }).catch(e => {
-
-    // })
-  };
+    localStorage.removeItem('_' + constants.key.storage.current_account_login)
+    localStorage.removeItem('_' + constants.key.storage.current_account)
+    window.location.href = '/dang-nhap'
+  }
 
   handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
-  };
+    this.setState({ anchorEl: null })
+    this.handleMobileMenuClose()
+  }
 
   handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
+    this.setState({ mobileMoreAnchorEl: event.currentTarget })
+  }
 
   handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
+    this.setState({ mobileMoreAnchorEl: null })
+  }
 
-  render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-        className="profile-menu"
-        color="primary"
-      >
-        <MenuItem onClick={this.handleProfile}>Thông tin cá nhân</MenuItem>
-        {/* <MenuItem onClick={this.handleMenuClose}>My account</MenuItem> */}
-        <MenuItem onClick={this.handlelogOut}>Đăng xuất</MenuItem>
-      </Menu>
-    );
-
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMobileMenuClose}
-
-      >
-        {/* <MenuItem>
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <MailIcon />
-            </Badge>
-          </IconButton>
-          <p>Messages</p>
-        </MenuItem>
-        <MenuItem>
-          <IconButton color="inherit">
-            <Badge badgeContent={11} color="secondary">
-              <NotificationsIcon />
-            </Badge>
-          </IconButton>
-          <p>Notifications</p>
-        </MenuItem> */}
-        <MenuItem onClick={this.handleProfile}>
-          <IconButton color="inherit" className="profile">
-            <AccountCircle fontSize='small' />
-          </IconButton>
-          <p>Thông tin cá nhân</p>
-        </MenuItem>
-        <MenuItem onClick={this.handlelogOut}>
-          <IconButton color="inherit">
-            <ExitToAppIcon fontSize='small' />
-          </IconButton>
-          <p>Đăng xuất</p>
-        </MenuItem>
-      </Menu>
-    );
-
+  render () {
+    const { classes } = this.props
     return (
-      <React.Fragment>
-        <div className={classes.root + " header"}>
-          <AppBar position="static">
-            <Toolbar>
-              <AppSidebarToggler
-                className="d-lg-none"
-                // mobile
-                children={
-                  // <IconButton className={classes.button} aria-label="Delete">
-                  <MenuIcon className={classes.menubutton + " icon-down-none"} />
-                  // </IconButton>
-                } />
-              <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                <div className={classes.box_menu + ' logo-isofh'}>
-                  {/* <a href={window.location.origin}>
-                    <img src="/images/logo/avatar.png" className="logo-img" alt='isofh' />
-                  </a> */}
-                  <AppSidebarToggler
-                    className="d-md-down-none"
-                    children={
-                      // <IconButton className={classes.button} aria-label="Delete">
-                      <MenuIcon className={classes.menubutton + " icon-down-none"} />
-                      // </IconButton>
-                    }
-                    display="lg" />
+      <div className='header-top-area'>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col-lg-12 col-md-12 col-sm-12 col-xs-12'>
+              <div className='header-top-wraper'>
+                <div className='row'>
+                  <div className='col-lg-1 col-md-0 col-sm-1 col-xs-12'>
+                    <div className='menu-switcher-pro'>
+                      <button
+                        type='button'
+                        id='sidebarCollapse'
+                        className='btn bar-button-pro header-drl-controller-btn btn-info navbar-btn'
+                      >
+                        <i className='fas fa-bars'></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div className='col-lg-6 col-md-7 col-sm-6 col-xs-12'>
+                    <div className='header-top-menu tabl-d-n'>
+                      <ul className='nav navbar-nav mai-top-nav'>
+                        <li className='nav-item'>
+                          <a href='#' className='nav-link'>
+                            Home
+                          </a>
+                        </li>
+                        <li className='nav-item'>
+                          <a href='#' className='nav-link'>
+                            About
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                  <div className='col-lg-5 col-md-5 col-sm-12 col-xs-12'>
+                    <div className='header-right-info'>
+                      <ul
+                        className='nav navbar-nav mai-top-nav header-right-menu'
+                        style={{ display: 'flex', msFlexDirection: 'row' }}
+                      >
+                        <li className='nav-item'>
+                          <a
+                            href='#'
+                            data-toggle='dropdown'
+                            role='button'
+                            aria-expanded='false'
+                            className='nav-link dropdown-toggle'
+                          >
+                            <img src='img/product/pro4.jpg' alt='' />
+                            <span className='admin-name'>Prof.Anderson</span>
+                            <i className='fa fa-angle-down edu-icon edu-down-arrow'></i>
+                          </a>
+                          <ul
+                            role='menu'
+                            className='dropdown-header-top author-log dropdown-menu animated zoomIn'
+                          >
+                            <li>
+                              <a href='#'>
+                                <span className='edu-icon edu-home-admin author-log-ic'></span>
+                                My Account
+                              </a>
+                            </li>
+                            <li>
+                              <a href='#'>
+                                <span className='edu-icon edu-user-rounded author-log-ic'></span>
+                                My Profile
+                              </a>
+                            </li>
+                            <li>
+                              <a href='#'>
+                                <span className='edu-icon edu-money author-log-ic'></span>
+                                User Billing
+                              </a>
+                            </li>
+                            <li>
+                              <a href='#'>
+                                <span className='edu-icon edu-settings author-log-ic'></span>
+                                Settings
+                              </a>
+                            </li>
+                            <li>
+                              <a href='#'>
+                                <span className='edu-icon edu-locked author-log-ic'></span>
+                                Log Out
+                              </a>
+                            </li>
+                          </ul>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
-              </Typography>
-              {/* <div className="logo-csyt"><a href="#"><img src={(this.state.hospitalLogo||'').absoluteUrl()} alt=""/></a></div> */}
-              <div className={classes.grow} />
-
-              <div className={classes.sectionDesktop + " information"}>
-                {/* <IconButton color="inherit">
-                  <Badge badgeContent={4} color="secondary">
-                    <MailIcon />
-                  </Badge>
-                </IconButton>
-                <IconButton color="inherit">
-                  <Badge badgeContent={17} color="secondary">
-                    <NotificationsIcon />
-                  </Badge>
-                </IconButton> */}
-
-                <span className="name-csyt-top item-right">{this.props.userApp.currentUser ? (this.props.userApp.currentUser || '').name : ""}</span>
-                <IconButton
-                  aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-                  aria-haspopup="true"
-                  onClick={this.handleProfileMenuOpen}
-                  color="inherit"
-                  className="icon-dropdown"
-                >
-                  <span className="user-icon">{this.props.userApp.currentUser ? <img width={100} height={100} src={(this.props.userApp.currentUser.avatar && this.props.userApp.currentUser.avatar.absoluteUrl() || '/avatar1.png')} alt="" /> : ''} </span>
-                  {/* <img src="/icon/arrowPointToRight.png" alt="" /> */}
-                </IconButton>
               </div>
-              <div className={classes.sectionMobile}>
-                <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                  <MoreIcon />
-                </IconButton>
-              </div>
-            </Toolbar>
-          </AppBar>
-          {renderMenu}
-          {renderMobileMenu}
+            </div>
+          </div>
         </div>
-      </React.Fragment>
-    );
+      </div>
+    )
   }
 }
 
-PrimarySearchAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
-};
-
-const styles = theme => ({
-  root: {
-    width: '100%',
-  },
-  button: {
-    color: '#fff'
-  },
-  menubutton: {
-    color: '#fff'
-  },
-  box_menu: {
-    width: 175,
-    height: 55,
-    textAlign: 'center'
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing.unit * 2,
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing.unit * 3,
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing.unit * 9,
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing.unit,
-    paddingRight: theme.spacing.unit,
-    paddingBottom: theme.spacing.unit,
-    paddingLeft: theme.spacing.unit * 10,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-});
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     userApp: state.userApp
-  };
+  }
 }
-export default withStyles(styles)(connect(mapStateToProps)(PrimarySearchAppBar));
+export default connect(mapStateToProps)(PrimarySearchAppBar)

@@ -12,8 +12,9 @@ const News = Loadable({
 })
 // https://github.com/ReactTraining/react-router/tree/master/packages/react-router-config
 const routes = [
-  { path: '/admin', exact: true, name: 'Trang chủ', component: Home },
-  { path: '/admin/news', exact: true, name: ("Tin tức"), component: News },
+  {path:'/admin/news', component:News}
+  // { path: '/admin', exact: true, name: 'Trang chủ', component: Home },
+  // { path: '/admin/news', exact: true, name: ("Tin tức"), component: News },
   // { path: '/admin/news/create-news', exact: true, name: ("Thêm mới tin tức"), component: CreateNews },
   // { path: '/admin/news/update/:id', exact: true, name: ("Chỉnh sửa tin tức"), component: CreateNews }
 ]

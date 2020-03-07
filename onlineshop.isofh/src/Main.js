@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import userProvider from "./data-access/user-provider";
+// import userProvider from "./data-access/user-provider";
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
 import constants from "./resources/strings";
 import { BrowserRouter } from 'react-router-dom'
@@ -65,9 +65,9 @@ const routes = [
 class App2 extends Component {
   constructor(props) {
     super(props);
-    constants.dataCache.current_admin = datacacheProvider.read("", constants.key.storage.current_account);
-    this.props.dispatch({ type: constants.action.action_user_login, value: userProvider.getAccountStorage() })
-    this.props.dispatch({ type: constants.action.action_user, value: constants.dataCache.current_admin })
+    // constants.dataCache.current_admin = datacacheProvider.read("", constants.key.storage.current_account);
+    // this.props.dispatch({ type: constants.action.action_user_login, value: userProvider.getAccountStorage() })
+    // this.props.dispatch({ type: constants.action.action_user, value: constants.dataCache.current_admin })
   }
   loadScript(path) {
     const script = document.createElement("script");

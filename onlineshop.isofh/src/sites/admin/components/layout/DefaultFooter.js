@@ -1,28 +1,37 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 const propTypes = {
-  children: PropTypes.node,
-};
+  children: PropTypes.node
+}
 
-const defaultProps = {};
+const defaultProps = {}
 
 class DefaultFooter extends Component {
-  render() {
-
+  render () {
     // eslint-disable-next-line
-    const { children, ...attributes } = this.props;
+    const { children, ...attributes } = this.props
 
     return (
-      <React.Fragment>
-        <span><a href="https://isofh.com">iSofH</a> &copy; 2019 creativeLabs.</span>
-        <span className="ml-auto">Powered by <a href="https://isofh.com">iSofH React Team</a></span>
-      </React.Fragment>
-    );
+      <div className='footer-copyright-area'>
+        <div className='container-fluid'>
+          <div className='row'>
+            <div className='col-lg-12'>
+              <div className='footer-copy-right'>
+                <p>
+                  Copyright © 2018. All rights reserved. Template by{' '}
+                  <a href='https://colorlib.com/wp/templates/'>Colorlib</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
   }
 }
 
-DefaultFooter.propTypes = propTypes;
-DefaultFooter.defaultProps = defaultProps;
+DefaultFooter.propTypes = propTypes
+DefaultFooter.defaultProps = defaultProps
 
-export default DefaultFooter;
+export default DefaultFooter

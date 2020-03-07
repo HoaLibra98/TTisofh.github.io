@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import userProvider from '../../../data-access/user-provider';
+// import userProvider from '../../../data-access/user-provider';
 import { connect } from 'react-redux';
 // import Footer from './../components/Footer';
 // import Header from '../components/Header';
@@ -13,6 +13,13 @@ function Loading() {
 }
 
 const routes = [
+    {
+        path: "/",
+        component: Loadable({
+          loader: () => import('../containners/home'),
+          loading: Loading,
+        })
+    }
 ]
 
 class LayoutTemplate extends Component {
@@ -62,13 +69,13 @@ class LayoutTemplate extends Component {
             deviceId: deviceId
         }
         // if (!lastSend || new Date().getTime() - lastSend > 300000) {
-        userProvider.userAccess(data).then(s => {
-            if (s && s.data && s.code === 0) {
-                // storageMgr.write("LAST_SEND_COUNTER", new Date().getTime());
-            }
-        }).catch(e => {
+        // userProvider.userAccess(data).then(s => {
+        //     if (s && s.data && s.code === 0) {
+        //         // storageMgr.write("LAST_SEND_COUNTER", new Date().getTime());
+        //     }
+        // }).catch(e => {
 
-        })
+        // })
         // }
     }
     render() {
