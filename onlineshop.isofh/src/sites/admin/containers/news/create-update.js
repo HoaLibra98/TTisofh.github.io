@@ -11,9 +11,10 @@ import {
 } from 'reactstrap'
 import newsProvider from '../../../../data-access/new-provider'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 
 const modalAction = ({ data, callBack }) => {
-  debugger
   const [open] = useState(true)
   const [checkbutton, setCheckButton] = useState(false)
   const [title, setTitle] = useState(
@@ -22,9 +23,43 @@ const modalAction = ({ data, callBack }) => {
   const [content, setContent] = useState(
     data && data.news && data.news.content ? data.news.content : ''
   )
-  const [image, setImage] = useState(data && data.length ? data.news.image : '')
+  const [image, setImage] = useState(
+    data && data.news && data.news.image ? data.news.image : ''
+  )
   const [dataCreate] = useState(data)
-  const create = () => {}
+  const [CheckValidate, setCheckValidate] = useState(false)
+  debugger
+  const create = () => {
+    let id = dataCreate && dataCreate.news ? dataCreate.news.id : ''
+    if (title.length == 0 || title === '') {
+      setCheckValidate(true)
+    } else {
+      setCheckValidate(false)
+    }
+    let param = {
+      news: {
+        title
+      }
+    }
+    if (id) {
+      debugger
+      newsProvider.update(id, param).then(s => {
+        if (s && s.code == 0 && s.data.data) {
+          toast.success('Cập nhật tin tức thành công', {
+            position: toast.POSITION.TOP_RIGHT
+          })
+        }
+      })
+    } else {
+      newsProvider.create(param).then(s => {
+        if (s && s.data.data && s.code === 0) {
+          toast.success('Thêm mới tin tức thành công', {
+            position: toast.POSITION.TOP_RIGHT
+          })
+        }
+      })
+    }
+  }
   const handleClose = () => {
     callBack()
   }
@@ -36,7 +71,7 @@ const modalAction = ({ data, callBack }) => {
         toggle={() => handleClose()}
         className='modal-lg'
       >
-        <ValidatorForm>
+        <ValidatorForm onSubmit={create}>
           <ModalHeader>
             {dataCreate && dataCreate.news && dataCreate.news.id
               ? 'CẬP NHẬT TIN TỨC'
@@ -58,11 +93,16 @@ const modalAction = ({ data, callBack }) => {
                   variant='outlined'
                   placeholder='Nhập tiêu đề'
                   onChange={event => {
-                    setTitle(event.target.name).replace('  ', ' ')
+                    setTitle(event.target.value)
                     setCheckButton(true)
                   }}
                   margin='normal'
                 />
+                {CheckValidate && title == '' ? (
+                  <span className='isofh-error'>vui lòng nhập tiêu đề</span>
+                ) : (
+                  ''
+                )}
               </Col>
             </Row>
           </ModalBody>

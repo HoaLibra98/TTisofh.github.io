@@ -32,7 +32,6 @@ const News = ({ classes }) => {
       size: state.size
     }
     newProvider.search(param).then(s => {
-      debugger
       if (s && s.code == 0) {
         setData(s.data.data)
       }

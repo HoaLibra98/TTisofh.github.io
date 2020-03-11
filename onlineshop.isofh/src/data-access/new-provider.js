@@ -23,7 +23,7 @@ export default {
   update (id, object) {
     return new Promise((resolve, reject) => {
       clientUtils
-        .requestApi('put', constants.api.news.update + '/id', object)
+        .requestApi('put', constants.api.news.update + '/' + id, object)
         .then(x => {
           resolve(x)
         })
@@ -35,7 +35,7 @@ export default {
   delete (id) {
     return new Promise((resolve, reject) => {
       clientUtils
-        .requestApi('delete', constants.api.news.delete + '/id')
+        .requestApi('delete', constants.api.news.delete + '/' + id)
         .then(x => {
           resolve(x)
         })
@@ -44,10 +44,10 @@ export default {
         })
     })
   },
-  create (id, object) {
+  create (object) {
     return new Promise((resolve, reject) => {
       clientUtils
-        .requestApi('post', constants.api.news.create + '/id', object)
+        .requestApi('post', constants.api.news.create, object)
         .then(x => {
           resolve(x)
         })

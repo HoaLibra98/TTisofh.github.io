@@ -11,8 +11,6 @@ const weatherHome = () => {
     loadPage()
   }, [])
   const loadPage = (action, item) => {
-    debugger
-
     let namesearch = action === 'name' ? item : name
     axios
       .get(
