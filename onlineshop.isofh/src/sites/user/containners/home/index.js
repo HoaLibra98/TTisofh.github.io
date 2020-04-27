@@ -1,23 +1,22 @@
-import React, { Component, useState, useEffect } from 'react'
-import { connect } from 'react-redux';
-import UpAndDown from './upAnddown'
-const weatherHome = (props) => {
- 
-  useEffect(() => {
-  }, [])
-
-  return (
-    <div className='container'>
-        <UpAndDown/>
-        Giá trị hiện tại : {props.value}
-    </div>
-  )
-}
-
-const mapStateToProps = (state, ownProps) => ({
-  value: state.number
-})
+import React from 'react'
+import Footer from './filter'
+import AddTodo from '../contain/addTodo'
+import VisibleTodoList from '../contain/visibleTodoList'
+import UpDown from './upAnddown'
+import {connect} from 'react-redux'
+import UndoRedo from './undoRedo'
+  
+const App = () => (
+  <div>
+    <AddTodo />
+    <VisibleTodoList />
+    <Footer />
+    <UndoRedo/>
+  </div>
+)
 
 export default connect(
-  mapStateToProps
-)(weatherHome)
+  state => {
+    return
+  }
+)(App)
