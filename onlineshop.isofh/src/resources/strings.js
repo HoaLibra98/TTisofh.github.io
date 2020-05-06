@@ -42,6 +42,9 @@ module.exports = {
       update: '/news/update',
       delete: '/news/delete',
       create: '/news/create'
+    },
+    user:{
+      login: '/user/login'
     }
   }
 }

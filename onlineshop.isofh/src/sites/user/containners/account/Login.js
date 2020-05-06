@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { toast } from 'react-toastify';
-// import userProvider from '../../../../data-access/user-provider';
+import userProvider from '../../../../data-access/userProvider';
 import dataCacheProvider from '../../../../data-access/datacache-provider';
 import constants from '../../../../resources/strings';
 import 'react-toastify/dist/ReactToastify.css';
@@ -31,45 +31,45 @@ class Login extends Component {
       window.location.href = "/admin";
     }
   }
-  // login() {
-  //   const { username, password } = this.state;
-  //   if (!username || !password) {
-  //     toast.error("Vui lòng nhập username/password! ", {
-  //       position: toast.POSITION.TOP_RIGHT
-  //     });
-  //   } else {
-  //     userProvider.login(username.trim(), password.trim()).then(s => {
-  //       switch (s.code) {
-  //         case 0:
-  //           let user = s.data.user;
-  //           this.props.dispatch({ type: constants.action.action_user_login, value: user })
-  //           dataCacheProvider.save("", constants.key.storage.current_account_login, user)
-  //           dataCacheProvider.save("", constants.key.storage.current_account, user).then(s => {
-  //             setTimeout(() => {
-  //               this.props.history.push("/admin");
-  //             }, 500);
-  //           });
-  //           break;
-  //         case 1:
-  //           toast.error("Thông tin đăng nhập không chính xác, vui lòng kiểm tra lại!", {
-  //             position: toast.POSITION.TOP_RIGHT
-  //           });
-  //           break;
-  //         case 3:
-  //           toast.error("Tài khoản đã bị inactive. Vui lòng liên hệ với Admin! ", {
-  //             position: toast.POSITION.TOP_RIGHT
-  //           });
-  //           break;
-  //         default:
-  //           toast.error("Đăng nhập thất bại!", {
-  //             position: toast.POSITION.TOP_RIGHT
-  //           });
-  //       }
-  //     }).catch(e => {
-  //     })
-  //   }
+  login() {
+    const { username, password } = this.state;
+    if (!username || !password) {
+      toast.error("Vui lòng nhập username/password! ", {
+        position: toast.POSITION.TOP_RIGHT
+      });
+    } else {
+      userProvider.login(username.trim(), password.trim()).then(s => {
+        switch (s.code) {
+          case 0:
+            let user = s.data.user;
+            this.props.dispatch({ type: constants.action.action_user_login, value: user })
+            dataCacheProvider.save("", constants.key.storage.current_account_login, user)
+            dataCacheProvider.save("", constants.key.storage.current_account, user).then(s => {
+              setTimeout(() => {
+                this.props.history.push("/admin");
+              }, 500);
+            });
+            break;
+          case 1:
+            toast.error("Thông tin đăng nhập không chính xác, vui lòng kiểm tra lại!", {
+              position: toast.POSITION.TOP_RIGHT
+            });
+            break;
+          case 3:
+            toast.error("Tài khoản đã bị inactive. Vui lòng liên hệ với Admin! ", {
+              position: toast.POSITION.TOP_RIGHT
+            });
+            break;
+          default:
+            toast.error("Đăng nhập thất bại!", {
+              position: toast.POSITION.TOP_RIGHT
+            });
+        }
+      }).catch(e => {
+      })
+    }
 
-  // }
+  }
 
   render() {
     const { username, password } = this.state;

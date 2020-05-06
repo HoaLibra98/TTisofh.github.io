@@ -11,69 +11,46 @@ import {
 } from 'reactstrap'
 import newsProvider from '../../../../data-access/new-provider'
 import { ValidatorForm, TextValidator } from 'react-material-ui-form-validator'
-import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css'
+import { connect } from 'react-redux'
+import actionNews from "../../../../action/news";
 
-const modalAction = ({ data, callBack }) => {
-  const [open] = useState(true)
-  const [checkbutton, setCheckButton] = useState(false)
-  const [title, setTitle] = useState(
-    data && data.news && data.news.title ? data.news.title : ''
-  )
-  const [content, setContent] = useState(
-    data && data.news && data.news.content ? data.news.content : ''
-  )
-  const [image, setImage] = useState(
-    data && data.news && data.news.image ? data.news.image : ''
-  )
-  const [dataCreate] = useState(data)
-  const [CheckValidate, setCheckValidate] = useState(false)
-  debugger
+function modalAction (props) {
+  const id = props.ID;
+  const [title, setTitle] = useState();
+  const [CheckValidate, setCheckValidate] = useState(false);
+  useEffect(() => {
+      props
+        .loadNewsDetail(id)
+        .then(s => {})
+        .catch(e => {
+        });
+  }, []);
+
   const create = () => {
-    let id = dataCreate && dataCreate.news ? dataCreate.news.id : ''
-    if (title.length == 0 || title === '') {
-      setCheckValidate(true)
-    } else {
+    if(title === '' || title === undefined){
+      setCheckValidate(true);
+      return
+    }
+    else{
       setCheckValidate(false)
     }
-    let param = {
-      news: {
-        title
-      }
-    }
-    if (id) {
-      debugger
-      newsProvider.update(id, param).then(s => {
-        if (s && s.code == 0 && s.data.data) {
-          toast.success('Cập nhật tin tức thành công', {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        }
-      })
-    } else {
-      newsProvider.create(param).then(s => {
-        if (s && s.data.data && s.code === 0) {
-          toast.success('Thêm mới tin tức thành công', {
-            position: toast.POSITION.TOP_RIGHT
-          })
-        }
-      })
-    }
+    props.createOrEdit();
+    props.callBack();
   }
   const handleClose = () => {
-    callBack()
+    props.callBack()
   }
   return (
     <div>
       <Modal
         backdrop='static'
         isOpen={true}
-        toggle={() => handleClose()}
+        toggle={() => props.callBack()}
         className='modal-lg'
       >
         <ValidatorForm onSubmit={create}>
           <ModalHeader>
-            {dataCreate && dataCreate.news && dataCreate.news.id
+            {id
               ? 'CẬP NHẬT TIN TỨC'
               : 'THÊM MỚI TIN TỨC'}
           </ModalHeader>
@@ -87,18 +64,24 @@ const modalAction = ({ data, callBack }) => {
               </Col>
               <Col md='10' className='news-title'>
                 <TextValidator
-                  value={title}
+                  value={props.title}
                   id='name'
                   name='name'
                   variant='outlined'
                   placeholder='Nhập tiêu đề'
-                  onChange={event => {
-                    setTitle(event.target.value)
-                    setCheckButton(true)
-                  }}
+                  onChange={e => {
+                    setTitle(e.target.value);
+                    if(id){
+                    props.updateDate({ id,title: e.target.value });
+                    }
+                    else{
+                    props.updateDate({ title: e.target.value });
+                  }
+                }
+                }
                   margin='normal'
                 />
-                {CheckValidate && title == '' ? (
+                {CheckValidate && ( title == undefined ||title == '') ? (
                   <span className='isofh-error'>vui lòng nhập tiêu đề</span>
                 ) : (
                   ''
@@ -114,23 +97,29 @@ const modalAction = ({ data, callBack }) => {
             >
               Trở về
             </Button>
-            {checkbutton ? (
               <Button variant='contained' color='primary' type='submit'>
-                {dataCreate.news && dataCreate.news.id
+                {id
                   ? 'Cập nhật'
                   : 'Thêm mới'}
               </Button>
-            ) : (
-              <Button variant='contained' color='primary' disabled>
-                {dataCreate.news && dataCreate.news.id
-                  ? 'Cập nhật'
-                  : 'Thêm mới'}
-              </Button>
-            )}
           </ModalFooter>
         </ValidatorForm>
       </Modal>
     </div>
   )
 }
-export default modalAction
+export default connect(
+  state => {
+  return {
+    title: state.news.title,
+    id:state.news.id
+    }
+  },
+  {
+    onSearch: actionNews.onSearch,
+    loadListNews: actionNews.loadListNews,
+    updateDate: actionNews.updateData,
+    loadNewsDetail: actionNews.loadNewsDetail,
+    createOrEdit: actionNews.createOrEdit
+  }
+)(modalAction);

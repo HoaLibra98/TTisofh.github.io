@@ -16,7 +16,7 @@ const routes = [
     {
         path: "/",
         component: Loadable({
-          loader: () => import('../containners/home'),
+          loader: () => import('../containners/account/Login'),
           loading: Loading,
         })
     }
