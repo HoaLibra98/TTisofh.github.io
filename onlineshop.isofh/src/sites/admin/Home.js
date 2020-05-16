@@ -29,6 +29,9 @@ import WithRoot from './WithRoot'
 import Login from '../user/containners/account/Login'
 import ArrowDropDown from '@material-ui/icons/ArrowDropDown'
 import IconButton from '@material-ui/core/IconButton'
+import { DatePicker } from "antd";
+import 'antd/dist/antd.css';
+const { YearPicker } = DatePicker
 class Home extends Component {
   constructor (props) {
     super(props)
@@ -97,6 +100,9 @@ class Home extends Component {
   //     // }
 
   // }
+  onChange(date, dateString) {
+    console.log(dateString)
+  }
   render () {
     const { classes } = this.props
     return (
@@ -218,6 +224,8 @@ class Home extends Component {
           <main className='main'>
             <AppBreadcrumb appRoutes={routes} />
             <Container fluid className='main-fuild'>
+            <YearPicker onChange={ (e, value) => {console.log(value)} } placeholder='chọn'/>
+
               <Switch>
                 {routes.map((route, idx) => {
                   return route.component ? (

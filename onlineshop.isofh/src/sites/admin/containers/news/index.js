@@ -1,23 +1,33 @@
 import React, { Component, useState, useEffect } from 'react'
-import { Select, Button, DatePicker, Form, Input, Tooltip, Modal } from "antd";
 import moment from 'moment'
 import ModelNews from './create-update'
-import {
-  Alert
-} from 'reactstrap'
-import IconButton from '@material-ui/core/IconButton'
+import SelectSize from "../../components/common/SelectSize";
+import Pagination from "../../components/common/Pagination";
 import { connect } from 'react-redux'
 import actionNews from "../../../../action/news";
-
+import { DatePicker,Button ,Tooltip,Modal} from "antd";
+import {toast} from'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import newProvider from '../../../../data-access/new-provider'
+import 'antd/dist/antd.css';
+const { confirm } = Modal;
+const { YearPicker } = DatePicker
 function News( props ){
   const [modalAction, setModalAction] = useState(false)
   const [Id, setId] = useState(null)
 
   useEffect(() => {
-    props.loadListNews();
-    console.log(props.loadListNews())
-    // props.onSearch("");
+    props.onSearch("", -1);
   }, []);
+
+
+  const onSizeChange = size => {
+    props.onSizeChange(size);
+  };
+
+  const onPageChange = page => {
+    props.gotoPage(page);
+  };
 
   const showModalAction = item => {
     if (item) {
@@ -38,15 +48,16 @@ function News( props ){
   }
   const closeModal = () => {
     setModalAction(false)
+    setId(null)
     props.updateDate({
       id: null,
       title: ''
     })
   }
-
-  const onDeleteItem = (item) => {
+  const onDeleteItem = item => () => {
     props.onDeleteItem(item);
   };
+  
 
   return (
     <div className='box-table'>
@@ -80,41 +91,56 @@ function News( props ){
           </tr>
         </thead>
         <tbody>
+          <tr>
+            <td>
+              <YearPicker onChange={ (e,dateString) => {console.log(e); console.log(dateString)}} placeholder='chọn'/>
+            </td>
+            <td>
+              <input
+                value={props.searchTitle}
+                onChange={(e) => {
+                  props.onSearch(e.target.value)
+                }}
+                placeholder="Tìm kiếm theo tiêu đề"
+              />
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
           {props.data && props.data.length > 0 ? (
             props.data.map((s, index) => {
               return (
                 <tr key={index}>
-                  <td>{index + 1}</td>
+                  <td>{(props.page - 1) * props.size + index + 1}</td>
                   <td>{s.news.title}</td>
                   <td>{s.news.link}</td>
                   <td>
-                    <img src={s.news.image} />
+                    <img src={s.news.image ? s.news.image.absoluteUrl() : null} />
                   </td>
                   <td>{moment(s.news.createdDate).format('DD-MM-YYYY')}</td>
                   <td>{s.news.createdUser}</td>
                   <td>
-                    <Tooltip title='Sửa'>
-                      <IconButton
-                        onClick={
-                          () => {
-                            showModalAction(s.news)
+                    <Tooltip placement="topLeft" title={"Sửa"}>
+                        <a
+                           onClick={
+                            () => {
+                              showModalAction(s.news)
+                            }
                           }
-                        }
-                        color='primary'
-                        className='btn'
-                        aria-label='EditIcon'
-                      >
-                        <img src='/images/icon/edit1.png' alt='' />
-                      </IconButton>
+                        >
+                          <img src='/images/icon/edit1.png' alt='' />
+                        </a>
                     </Tooltip>
-                      <Tooltip placement="topLeft" title={"Xóa"}>
-                        <IconButton>
-                          <a
-                            onClick={() => onDeleteItem(s.news)}
-                          >
-                            <img src='/images/icon/delete.png' alt='' />
-                          </a>
-                        </IconButton>
+
+                    <Tooltip placement="topLeft" title={"Xóa"}>
+                        <a
+                         onClick={onDeleteItem(s.news)}
+                        >
+                          <img src='/images/icon/delete.png' alt='' />
+                        </a>
                     </Tooltip>
                   </td>
                 </tr>
@@ -123,30 +149,47 @@ function News( props ){
           ) : (
             <tr>
               <td colSpan='7'>
-                <Alert color='danger'>
-                  Thông báo! Không tìm thấy tin tức nào.
-                </Alert>
+                <p>Thông báo! Không tìm thấy tin tức nào.</p>
               </td>
             </tr>
           )}
         </tbody>
       </table>
       {modalAction && (
-        <ModelNews ID = {Id} callBack={closeModal.bind(this)} />
+        <ModelNews ID = {Id} visible={modalAction} callBack={closeModal.bind(this)} />
       )}
+
+      <div className="footer">
+          <SelectSize value={props.size} selectItem={onSizeChange} />
+          <Pagination
+            onPageChange={onPageChange}
+            page={props.page}
+            size={props.size}
+            total={props.total}
+            style={{ flex: 1, justifyContent: "flex-end" }}
+          />
+        </div>
     </div>
   )
 }
 export default connect(
   state => {
+    debugger
   return {
-      data: state.news.news
+      data: state.news.data,
+      title: state.news.searchTitle,
+      searchTitle: state.news.searchTitle,
+      page: state.news.page || 1,
+      size: state.news.size || 10,
+      total: state.news.total || 0,
     }
   },
   {
     onSearch: actionNews.onSearch,
     loadListNews: actionNews.loadListNews,
     updateDate: actionNews.updateData,
+    gotoPage : actionNews.gotoPage,
+    onSizeChange: actionNews.onSizeChange,
     onDeleteItem: actionNews.onDeleteItem
   }
 )(News);

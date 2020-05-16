@@ -43,6 +43,9 @@ module.exports = {
       delete: '/news/delete',
       create: '/news/create'
     },
+    image:{
+      upload: '/file/upload'
+    },
     user:{
       login: '/user/login'
     }

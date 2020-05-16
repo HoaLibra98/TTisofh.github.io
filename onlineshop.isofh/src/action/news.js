@@ -1,9 +1,8 @@
 import newProvider from '../data-access/new-provider'
 import {toast} from'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { Modal } from "antd";
+import { Modal } from 'antd'
 const { confirm } = Modal;
-
 function updateData(data) {
     return dispatch => {
         dispatch({
@@ -37,13 +36,64 @@ function onSearch(title) {
       } else {
         dispatch(
           updateData({
-            searchName: title
+            searchTitle: title
           })
         );
       }
+      dispatch(gotoPage(1))
     };
   }
-  
+  const onDeleteItem = (item) => {
+    debugger
+    return (dispatch, getState) => {
+      return new Promise((resolve, reject) => {
+        debugger
+        confirm({
+          title: "Xác nhận",
+          content: `Bạn có muốn xóa tin tức ${item.title}?`,
+          okText: "Xóa",
+          okType: "danger",
+          cancelText: "Hủy",
+          onOk() {
+            newProvider
+              .delete(item.id)
+              .then(s => {
+                if (s.code == 0) {
+                  toast.success("xóa tin tức thành công!", {
+                    position: toast.POSITION.TOP_RIGHT
+                  });
+                  let data = getState().news.data || [];
+                  let index = data.findIndex(x => x.id == item.id);
+                  if (index != -1);
+                  data.splice(index, 1);
+                  dispatch(
+                    updateData({
+                      data: [...data]
+                    })
+                  );
+                  dispatch(onSearch());
+                  resolve();
+                } else {
+                  toast.error("Xóa tin tức không thành công!", {
+                    position: toast.POSITION.TOP_RIGHT
+                });
+                  reject();
+                }
+              })
+              .catch(e => {
+                toast.error("Xóa tin tức không thành công!", {
+                  position: toast.POSITION.TOP_RIGHT
+              });
+                reject();
+              });
+          },
+          onCancel() {
+            reject();
+          }
+        });
+      });
+    };
+  };
 function createOrEdit() {
     return (dispatch,getState) => {
         let id = getState().news.id;
@@ -66,7 +116,7 @@ function createOrEdit() {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                           }
-                          dispatch(loadListNews());
+                          dispatch(onSearch());
                         break;
                     default:
                         if (!id) {
@@ -78,6 +128,8 @@ function createOrEdit() {
                                 position: toast.POSITION.TOP_RIGHT
                             });
                           }
+                          dispatch(onSearch());
+
                         break;
                 }
             }
@@ -111,56 +163,6 @@ function loadNewsDetail(id) {
     };
   }
 
-  function onDeleteItem(item) {
-    return (dispatch, getState) => {
-      return new Promise((resolve, reject) => {
-        confirm({
-          title: "Xác nhận",
-          content: `Bạn có muốn xóa tin tức ${item.title}?`,
-          okText: "Xóa",
-          okType: "danger",
-          cancelText: "Hủy",
-          onOk() {
-            newProvider
-              .delete(item.id)
-              .then(s => {
-                if (s.code == 0) {
-                  toast.success("xóa tin tức thành công!", {
-                    position: toast.POSITION.TOP_RIGHT
-                  });
-                  let data = getState().news.data || [];
-                  let index = data.findIndex(x => x.id == item.id);
-                  if (index != -1);
-                  data.splice(index, 1);
-                  dispatch(
-                    updateData({
-                      data: [...data]
-                    })
-                  );
-                  dispatch(loadListNews());
-                  resolve();
-                } else {
-                  toast.error("Xóa tin tức không thành công!", {
-                    position: toast.POSITION.TOP_RIGHT
-                });
-                  reject();
-                }
-              })
-              .catch(e => {
-                toast.error("Xóa tin tức không thành công!", {
-                  position: toast.POSITION.TOP_RIGHT
-              });
-                reject();
-              });
-          },
-          onCancel() {
-            reject();
-          }
-        });
-      });
-    };
-  }
-
 
   function onSizeChange(size) {
     return (dispatch, getState) => {
@@ -178,13 +180,13 @@ function loadNewsDetail(id) {
     return (dispatch, getState) => {
       dispatch(updateData({ page: page }));
       let size = getState().news.size || 10;
-      let title = getState().news.title;
-      productProvider
+      let title = getState().news.searchTitle;
+      newProvider
         .search(page, size, title)
         .then(s => {
           dispatch(
             updateData({
-              total: s.data.total || size,
+              total: s.data.data.total || size,
               data: s.data.data || []
             })
           );
@@ -199,7 +201,7 @@ export default{
     onSearch,
     createOrEdit,
     loadNewsDetail,
-    onDeleteItem,
     gotoPage,
-    onSizeChange
+    onSizeChange,
+    onDeleteItem
 }
