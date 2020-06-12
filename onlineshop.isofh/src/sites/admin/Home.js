@@ -5,9 +5,10 @@ import PropTypes from "prop-types";
 import { withStyles } from "@material-ui/core/styles";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
-import "./app.scss";
 import constants from "../../resources/strings";
-import datacacheProvider from "../../data-access/datacache-provider";
+import dataCacheProvider from "../../data-access/datacache-provider";
+import "./app.scss";
+
 // import userProvider from '../../data-access/user-provider';
 import {
   // AppAside,
@@ -66,16 +67,17 @@ class Home extends Component {
   }
   componentDidMount() {
     this.setState({ menus: this.getMenu() });
-    constants.dataCache.current_admin = datacacheProvider.read(
-      "",
-      constants.key.storage.current_account
-    );
+   
   }
   onChange(date, dateString) {
     console.log(dateString);
   }
   render() {
     const { classes } = this.props;
+    const userCheck = dataCacheProvider.read(
+      "",
+      constants.key.storage.current_account_login
+    );
     return (
       <div className="app">
         <AppHeader fixed>
@@ -208,10 +210,10 @@ class Home extends Component {
                   ) : null;
                 })}
               </Switch>
-              {/* {
-                                (!this.props.userApp.isLogin) &&
-                                <Redirect to="/dang-nhap" component={Login} />
-                            } */}
+              {
+                                (!userCheck) ?
+                                <Redirect to="/dang-nhap" component={Login} /> : ''
+                            }
             </Container>
           </main>
         </div>

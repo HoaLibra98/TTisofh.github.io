@@ -15,18 +15,8 @@ class Login extends Component {
   }
 
   componentWillMount() {
-    // this.checkUserLogin();
   }
-  
-  checkUserLogin() {
-    const userCheck = dataCacheProvider.read(
-      "",
-      constants.key.storage.current_account_login
-    );
-    if(userCheck){
-      debugger
-    }
-  }
+ 
 
   login() {
     const { username, password } = this.state;

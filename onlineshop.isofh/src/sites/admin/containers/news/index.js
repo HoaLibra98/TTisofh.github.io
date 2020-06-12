@@ -101,9 +101,11 @@ function News(props) {
                 value={props.searchDate}
                 onChange={(e) => {
                   debugger
-                  props.onSearch(props.searchTitle, moment(e._d).format("yyyy/MM/dd"));
+                  props.onSearch(props.searchTitle, e._d);
                 }}
+                format={"dd/MM/YYYY"} 
                 placeholder="Tìm kiếm theo ngày tạo"
+                getPopupContainer={(trigger) => trigger.parentNode}
               />
             </td>
             <td></td>
