@@ -210,10 +210,7 @@ class Home extends Component {
                   ) : null;
                 })}
               </Switch>
-              {
-                                (!userCheck) ?
-                                <Redirect to="/dang-nhap" component={Login} /> : ''
-                            }
+             
             </Container>
           </main>
         </div>

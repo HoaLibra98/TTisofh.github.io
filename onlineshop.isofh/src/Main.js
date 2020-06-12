@@ -77,8 +77,16 @@ class App2 extends Component {
   }
 
   render() {
+    const userCheck = dataCacheProvider.read(
+      "",
+      constants.key.storage.current_account_login
+    );
     return (<BrowserRouter>
       <div className="web-bve">
+      {
+                                (!userCheck) ?
+                                <Redirect to="/dang-nhap" component={Login} /> : ''
+                            }
         <Router>
           <div>
             <Switch>
