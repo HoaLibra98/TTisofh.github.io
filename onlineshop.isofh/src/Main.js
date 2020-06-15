@@ -5,8 +5,9 @@ import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-d
 import constants from "./resources/strings";
 import { BrowserRouter } from 'react-router-dom'
 import Loadable from 'react-loadable';
-import datacacheProvider from './data-access/datacache-provider';
-
+import dataCacheProvider from './data-access/datacache-provider';
+import Login from "./sites/user/containners/account/Login";
+import Admin from "./sites/admin/Home";
 function Loading() {
   return <div></div>;
 }
@@ -83,10 +84,6 @@ class App2 extends Component {
     );
     return (<BrowserRouter>
       <div className="web-bve">
-      {
-                                (!userCheck) ?
-                                <Redirect to="/dang-nhap" component={Login} /> : ''
-                            }
         <Router>
           <div>
             <Switch>
@@ -101,7 +98,10 @@ class App2 extends Component {
                   return null;
                 })
               }
-              <Redirect from="/" to="/trang-chu" />
+              {
+          (!userCheck) ?
+            <Redirect to="/dang-nhap" component={Login} /> : <Redirect to="/admin" component={Admin} />
+      }
             </Switch>
           </div>
         </Router>

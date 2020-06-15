@@ -13,15 +13,16 @@ import actionNews from "../../../../action/news";
 import { Form, Button, Input, Select, Upload, Modal } from "antd";
 import { PlusOutlined, MinusCircleOutlined } from "@ant-design/icons";
 import imageProvider from "../../../../data-access/image-provider";
-
+import "antd/dist/antd.css";
 function modalAction(props) {
   const [CheckValidate, setCheckValidate] = useState(false);
+  const ID = props.match.params.id;
   const files = useRef([]);
   const [state, _setState] = useState({
     data: [],
     previewVisible: false,
     previewImage: "",
-    fileList: [],
+    fileList: []
   });
   const setState = (data = {}) => {
     _setState((state) => {
@@ -29,27 +30,18 @@ function modalAction(props) {
     });
   };
   useEffect(() => {
-    props
-      .loadNewsDetail(props.id)
-      .then((s) => {
-        let logo = {};
-        logo.url = s.data.logo;
-        setState({
-          data: s.news,
-          fileList: s[0].news.image
-            ? [
-                {
-                  uid: "-1",
-                  name: "image.png",
-                  status: "done",
-                  url: s[0].news.image.absoluteUrl(),
-                },
-              ]
-            : [],
-        });
-        console.log(s[0].news.image)
+    props.loadNewsDetail(ID).then( s => {
+      setState({
+        fileList : s[0].news.image ? [
+          {
+            uid: "-1",
+            name: "image.png",
+            status: "done",
+            url: s[0].news.image.absoluteUrl(),
+          },
+        ] : []
       })
-      .catch((e) => {});
+    })
   }, []);
 
   function getBase64(file) {
@@ -62,7 +54,6 @@ function modalAction(props) {
   }
   const { previewVisible, previewImage, fileList } = state;
   const handlePreview = async (file) => {
-    debugger
     if (!file.url && !file.preview) {
       file.preview = await getBase64(file.originFileObj);
     }
@@ -70,10 +61,11 @@ function modalAction(props) {
       previewImage: file.url || file.preview,
       previewVisible: true,
     });
-    props.updateDate({ image: file.url || file.preview });
   };
-  const handleChange = ({ fileList }) => {};
-  const handleCancel = () => setState({ previewVisible: false });
+  // const handleChange = ({ fileList }) => {};
+  const handleCancel = () => 
+    setState({ previewVisible: false })
+  ;
   // const uploadImage = (event) => {
   //   imageProvider
   //     .upload(event.target.files[0])
@@ -89,32 +81,31 @@ function modalAction(props) {
   const create = () => {
     if (props.title === "" || props.title === undefined) {
       setCheckValidate(true);
-      console.log(CheckValidate)
       return;
     } else {
       setCheckValidate(false);
       props.createOrEdit();
-      props.callBack();
+      window.location.href = "/admin/news"
+
     }
   };
   const handleClose = () => {
-    props.callBack();
+      props.updateDate({
+      id: null,
+      title: "",
+      image: "",
+    });
+    window.location.href = "/admin/news"
   };
 
   // const handleDeleteImage = () => {
   //   props.updateDate({ image: "" });
   // };
-
+  console.log(fileList)
   return (
-    <Modal
-      visible={props.visible}
-      title={ props.id ? "CẬP NHẬT TIN TỨC" : "THÊM MỚI TIN TỨC"}
-      onOk={() => create()}
-      onCancel={() => handleClose()}
-      okText={ props.id ? "Cập nhật" : "Thêm mới"}
-      cancelText="Trở về"
-    >
+    <div>
       <div className="form-create-update">
+        <div><h3>{props.id ? "CẬP NHẬT TIN TỨC" : "THÊM MỚI TIN TỨC"}</h3></div>
         <div className="row">
           <div className="col-md-3">
             <div>
@@ -172,7 +163,7 @@ function modalAction(props) {
                     })
                   }
                   onPreview={handlePreview}
-                  onChange={handleChange}
+                  // onChange={handleChange}
                   onRemove={(file) => {
                     files.current = files.current.filter(
                       (item) => item.uid !== file.uid
@@ -223,19 +214,39 @@ function modalAction(props) {
                   }}
                   accept=".png,.gif,.jpg"
                 >
-                  {fileList.length >= 1 ? null : (
+                  {fileList.length > 0 ? null
+                   : (
                     <div className="ant-upload-text">Upload</div>
-                  )}
+                   )
+                  }
                 </Upload>
               {/* </label>
             </div> */}
           </div>
         </div>      
       </div>
+      <div>
+          <Button
+                size="sm"
+                className="btn-info btn-brand mr-1 mb-1"
+                onClick={() => handleClose()}
+              >
+                <i className="fa fa-plus-circle" style={{ marginRight: 8 }}></i>
+                <span>Trở về</span>
+          </Button>
+          <Button
+                size="sm"
+                className="btn-info btn-brand mr-1 mb-1"
+                onClick={() => create()}
+              >
+                <i className="fa fa-plus-circle" style={{ marginRight: 8 }}></i>
+                <span>{props.id ? "Cập nhật" : "Thêm mới"}</span>
+          </Button>
+      </div>
       <Modal visible={previewVisible} footer={null} onCancel={handleCancel}>
         <img alt="example" style={{ width: "100%" }} src={previewImage} />
       </Modal>
-    </Modal>
+    </div>
   );
 }
 export default connect(

@@ -2,6 +2,7 @@ import newProvider from "../data-access/new-provider";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Modal } from "antd";
+import moment from 'moment'
 const { confirm } = Modal;
 function updateData(data) {
   return (dispatch) => {
@@ -35,7 +36,7 @@ function onSearch(title, date) {
       dispatch(
         updateData({
           searchTitle: title,
-          searchDate: date,
+          searchDate: date
         })
       );
     }
@@ -181,15 +182,12 @@ function gotoPage(page) {
     dispatch(updateData({ page: page }));
     let size = getState().news.size || 10;
     let title = getState().news.searchTitle;
-    let date = getState().news.searchDate && getState().news.searchDate !== -1 ? getState().news.searchDate : '' ;
-    let createdDate = date;
-    console.log(getState().news.searchDate)
-    newProvider.search(page, size, title,createdDate).then((s) => {
-    debugger
-
-      dispatch(
+    let date = getState().news.searchDate && getState().news.searchDate != -1 ? getState().news.searchDate : null ;
+    console.log(date)
+    newProvider.search(page, size, title, date).then((s) => {
+    dispatch(
         updateData({
-          total: s.data.data.total || size,
+          total: s.data.total,
           data: s.data.data || [],
         })
       );

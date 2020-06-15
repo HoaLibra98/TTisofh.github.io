@@ -30,9 +30,6 @@ import WithRoot from "./WithRoot";
 import Login from "../user/containners/account/Login";
 import ArrowDropDown from "@material-ui/icons/ArrowDropDown";
 import IconButton from "@material-ui/core/IconButton";
-import { DatePicker } from "antd";
-import "antd/dist/antd.css";
-const { YearPicker } = DatePicker;
 class Home extends Component {
   constructor(props) {
     super(props);
@@ -72,6 +69,9 @@ class Home extends Component {
   onChange(date, dateString) {
     console.log(dateString);
   }
+  onLogout(){
+    this.props.history.push("/dang-nhap")
+  }
   render() {
     const { classes } = this.props;
     const userCheck = dataCacheProvider.read(
@@ -83,17 +83,17 @@ class Home extends Component {
         <AppHeader fixed>
           <div className="left-sidebar-pro">
             <nav id="sidebar" className="">
-              <div className="sidebar-header">
+              <div className="sidebar-header" style={{padding:"7px 0px"}}>
                 <a href="index.html">
                   <img
                     className="main-logo"
-                    src="/images/logo/logo.png"
+                    src="/images/logo.png"
                     alt=""
                   />
                 </a>
                 <strong>
-                  <a href="index.html">
-                    <img src="/images.logo/logosn.png" alt="" />
+                  <a href="#" style={{color:"black"}}>
+                    Isofh Portal
                   </a>
                 </strong>
               </div>
