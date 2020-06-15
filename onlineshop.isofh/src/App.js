@@ -10,7 +10,7 @@ import { ToastContainer } from 'react-toastify';
 import Main from './Main';
 import AppReducer from './reducers';
 import stringUtils from 'mainam-react-native-string-utils';
-
+import "antd/dist/antd.css";
 const store = createStore(AppReducer,applyMiddleware(thunk));
 
 const Kernel = () => (

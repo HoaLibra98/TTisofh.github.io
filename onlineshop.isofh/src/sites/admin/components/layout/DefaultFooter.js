@@ -19,8 +19,7 @@ class DefaultFooter extends Component {
             <div className='col-lg-12'>
               <div className='footer-copy-right'>
                 <p>
-                  Copyright © 2018. All rights reserved. Template by{' '}
-                  <a href='https://colorlib.com/wp/templates/'>Colorlib</a>
+                  Copyright © 2020. All rights reserved
                 </p>
               </div>
             </div>
