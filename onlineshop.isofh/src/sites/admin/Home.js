@@ -46,6 +46,13 @@ class Home extends Component {
         imgUrl: "fa-basketball-ball",
         classActiveStyle: "cooperactive-basis",
       },
+      {
+        userType: [],
+        name: "QL tài khoản",
+        url: "/admin/user",
+        imgUrl: "fa-basketball-ball",
+        classActiveStyle: "cooperactive-basis",
+      },
     ];
     return allMenus.filter((item) => {
       if (!(item.userType || []).length) return true;

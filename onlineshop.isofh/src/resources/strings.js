@@ -47,7 +47,12 @@ module.exports = {
       upload: '/file/upload'
     },
     user:{
-      login: '/user/login'
+      login: '/user/login',
+      search: "/user/search",
+      getAll: '/user/get-all',
+      update: '/user/update',
+      delete: '/user/delete',
+      create: '/user/create'
     }
   }
 }

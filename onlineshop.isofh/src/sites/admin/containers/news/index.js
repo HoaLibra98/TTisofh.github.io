@@ -10,10 +10,21 @@ import { DatePicker, Button, Tooltip, Modal } from "antd";
 import "antd/dist/antd.css";
 function News(props) {
   const [modalAction, setModalAction] = useState(false);
+  const [count, setCount] = useState(1);
+  
   useEffect(() => {
     props.onSearch("", -1);
+    console.log("value count is 1: " + count)
   }, []);
-
+  useEffect(() => {
+    console.log("value count is 3: " + count)
+  },[count])
+  const tang = () => {
+    setCount(count + 1)
+  }
+  const giam = () => {
+    setCount(count - 1)
+  }
   const onSizeChange = (size) => {
     props.onSizeChange(size);
   };
@@ -74,6 +85,15 @@ function News(props) {
 
   return (
     <div className="box-table">
+      {/* <div>
+        <Button onClick={() => tang()}>
+          tăng
+        </Button>
+             <span>{count}</span>
+        <Button onClick={() => giam()}>
+          giảm
+        </Button>
+      </div> */}
       <div className="head-table">
         <i className="fa fa-align-justify font-icon"></i>
         <strong>Quản lý tin tức</strong>
