@@ -21,13 +21,12 @@ export default {
     });
   },
   search(page, size, userName, Name,gender, createdDate) {
-    debugger
     let parameters =
       (page ? "?page=" + page : "&page=" + -1) +
       (size ? "&size=" + size : "&size=" + -1) +
       (userName ? "&username=" + userName : "")+
       (Name ? "&name=" + Name : "") +
-      ((gender == 1) ? "&gender=" + gender  : (gender == 0) ? "&gender=" + gender : "")+
+      ((gender == 1 || gender == 0) ? "&gender=" + gender : "")+
       (createdDate ? "&createdDate=" + createdDate : "") 
     return new Promise((resolve, reject) => {
       clientUtils
@@ -40,10 +39,10 @@ export default {
         });
     });
   },
-  delete(id) {
+  reset(id) {
     return clientUtils.requestApi(
-      "delete",
-      constants.api.user.delete + "/" + id
+      "put",
+      constants.api.user.reset + "/" + id
     );
   },
   getDetail(id) {

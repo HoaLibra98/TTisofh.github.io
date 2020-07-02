@@ -51,7 +51,7 @@ module.exports = {
       search: "/user/search",
       getAll: '/user/get-all',
       update: '/user/update',
-      delete: '/user/delete',
+      reset: '/user/reset-password',
       create: '/user/create'
     }
   }

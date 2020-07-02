@@ -13,7 +13,7 @@ function News(props) {
   const [count, setCount] = useState(1);
   
   useEffect(() => {
-    props.onSearch("", -1);
+    props.onSearch("", null);
     console.log("value count is 1: " + count)
   }, []);
   useEffect(() => {
@@ -141,7 +141,7 @@ function News(props) {
                 // value={props.searchDate}
                 onChange={(e) => {
                   if(e){
-                    props.onSearch(props.searchTitle, moment(e._d).format("YYYY-MM-DD"));
+                    props.onSearch(props.searchTitle, e._d);
                   }
                   else{
                     props.onSearch(props.searchTitle, e);

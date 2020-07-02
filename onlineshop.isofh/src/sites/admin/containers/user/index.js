@@ -9,7 +9,7 @@ import moment from "moment";
 const { Option } = Select;
 const index = (props) => {
     useEffect(() => {
-        props.onSearch("", "","",null)
+        props.onSearch("", "",-1,null)
     },[])
     const modalCreateUpdate = (item) => {
         props.updateDate({
@@ -36,14 +36,10 @@ const index = (props) => {
       props.gotoPage(page);
     };
 
-    const onDeleteItem = (item) => () => {
-      props.onDeleteItem(item);
+    const onResetItem = (item) => () => {
+      debugger
+      props.onResetItem(item);
     };
-
-    function onChange(value) {
-      console.log(`selected ${value}`);
-      props.onSearch(props.searchUserName,props.searchName,value, props.searchDate);
-    }
 
     return(
         <div className="box-table">
@@ -69,7 +65,7 @@ const index = (props) => {
             </th>
             <th scope="col">Họ và tên</th>
             <th scope="col">Tên tk</th>
-            <th scope="col">giới tính</th>
+            <th scope="col" style={{width:"7%"}}>giới tính</th>
             <th scope="col">Tình trạng</th>
             <th scope="col">Ngày tạo</th>
             <th scope="col">Người tạo</th>
@@ -103,12 +99,16 @@ const index = (props) => {
                   showSearch
                   placeholder="Giới tính"
                   optionFilterProp="children"
-                  onChange={onChange}
+                  onChange={
+                    (e) => {
+                      props.onSearch(props.searchUserName,props.searchName,e, props.searchDate);
+                    }
+                  }
                   filterOption={(input, option) =>
                     option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
                   }
                 >
-                  <Option value="">Tất cả</Option>
+                  <Option value={-1}>Tất cả</Option>
                   <Option value={1}>Nam</Option>
                   <Option value={0}>Nữ</Option>
                 </Select>
@@ -119,10 +119,10 @@ const index = (props) => {
                 value={props.searchDate}
                 onChange={(e) => {
                   if(e){
-                    props.onSearch(props.userName,props.userName,props.gender, moment(e._d).format("YYYY-MM-DD"));
+                    props.onSearch(props.userName,props.userName,props.gender, e._d);
                   }
                   else{
-                    props.onSearch(props.searchTitle, e);
+                    props.onSearch(props.userName,props.userName,props.gender, e);
                   }
                 }}
                 format={"DD/MM/YYYY"} 
@@ -157,7 +157,7 @@ const index = (props) => {
                     </Tooltip>
 
                     <Tooltip placement="topLeft" title={"Xóa"}>
-                      <a onClick={onDeleteItem(s.user)}>
+                      <a onClick={onResetItem(s.user)}>
                         <img src="/images/icon/delete.png" alt="" />
                       </a>
                     </Tooltip>
@@ -189,6 +189,7 @@ const index = (props) => {
 }
 export default connect(
     (state) => {
+      debugger
         return{
             name: state.user.name,
             data: state.user.data || [],
@@ -207,6 +208,6 @@ export default connect(
         updateDate: actionUser.updateData,
         gotoPage: actionUser.gotoPage,
         onSizeChange: actionUser.onSizeChange,
-        onDeleteItem: actionUser.onDeleteItem,
+        onResetItem: actionUser.onResetItem,
     }
 )(index);

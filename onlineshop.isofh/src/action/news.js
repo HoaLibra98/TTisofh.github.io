@@ -95,7 +95,6 @@ const onDeleteItem = (item) => {
 function createOrEdit() {
   return (dispatch, getState) => {
     let id = getState().news.id;
-    console.log(getState().news);
     let title = getState().news.title;
     let image = getState().news.image;
     newProvider
@@ -182,7 +181,7 @@ function gotoPage(page) {
     dispatch(updateData({ page: page }));
     let size = getState().news.size || 10;
     let title = getState().news.searchTitle;
-    let date = getState().news.searchDate && getState().news.searchDate != -1 ? getState().news.searchDate : null ;
+    let date = getState().news.searchDate ? moment(getState().news.searchDate).format("YYYY-MM-DD") : null ;
     console.log(date)
     newProvider.search(page, size, title, date).then((s) => {
     dispatch(

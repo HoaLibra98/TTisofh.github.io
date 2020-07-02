@@ -31,7 +31,7 @@ function loadListUser() {
 
 function onSearch(userName, name,gender,createdDate) {
   return (dispatch, getState) => {
-    if (userName === undefined && name === undefined) {
+    if (userName === undefined && name === undefined && createdDate === undefined && gender === undefined) {
     } else {
       dispatch(
         updateData({
@@ -45,43 +45,43 @@ function onSearch(userName, name,gender,createdDate) {
     dispatch(gotoPage(1));
   };
 }
-const onDeleteItem = (item) => {
+const onResetItem = (item) => {
   return (dispatch, getState) => {
     return new Promise((resolve, reject) => {
       confirm({
         title: "Xác nhận",
-        content: `Bạn có muốn xóa tài khoản ${item.userName}?`,
-        okText: "Xóa",
+        content: `Bạn có muốn reset tài khoản ${item.username}?`,
+        okText: "Xác nhận",
         okType: "danger",
         cancelText: "Hủy",
         onOk() {
           userProvider
-            .delete(item.id)
+            .reset(item.id)
             .then((s) => {
               if (s.code == 0) {
-                toast.success("xóa tài khoản thành công!", {
+                toast.success("Reset tài khoản thành công!", {
                   position: toast.POSITION.TOP_RIGHT,
                 });
-                let data = getState().user.data || [];
-                let index = data.findIndex((x) => x.id == item.id);
-                if (index != -1);
-                data.splice(index, 1);
-                dispatch(
-                  updateData({
-                    data: [...data],
-                  })
-                );
+                // let data = getState().user.data || [];
+                // let index = data.findIndex((x) => x.id == item.id);
+                // if (index != -1);
+                // data.splice(index, 1);
+                // dispatch(
+                //   updateData({
+                //     data: [...data],
+                //   })
+                // );
                 dispatch(onSearch());
                 resolve();
               } else {
-                toast.error("Xóa tài khoản không thành công!", {
+                toast.error("Reset tài khoản không thành công!", {
                   position: toast.POSITION.TOP_RIGHT,
                 });
                 reject();
               }
             })
             .catch((e) => {
-              toast.error("Xóa tài khoản không thành công!", {
+              toast.error("Reset tài khoản không thành công!", {
                 position: toast.POSITION.TOP_RIGHT,
               });
               reject();
@@ -150,7 +150,7 @@ function loadUserDetail(id) {
               updateData({
                 id: s.data.data[0].user.id,
                 name: s.data.data[0].user.name,
-                userName: s.data.data[0].user.userName,
+                userName: s.data.data[0].user.username,
               })
             );
             resolve(s.data.data);
@@ -183,8 +183,10 @@ function gotoPage(page) {
     let name = getState().user.searchName;
     let userName = getState().user.searchUserName;
     let gender = getState().user.searchGender
-    let date = getState().user.searchDate && getState().user.searchDate != -1 ? getState().user.searchDate : null ;
-    userProvider.search(page, size, name, userName,gender, date).then((s) => {
+    let date = getState().user.searchDate ? moment(getState().user.searchDate).format("YYYY-MM-DD") : null ;
+    console.log(date)
+    debugger
+    userProvider.search(page, size, userName, name,gender, date).then((s) => {
     dispatch(
         updateData({
           total: s.data.total,
@@ -203,5 +205,5 @@ export default {
   loadUserDetail,
   gotoPage,
   onSizeChange,
-  onDeleteItem,
+  onResetItem,
 };
