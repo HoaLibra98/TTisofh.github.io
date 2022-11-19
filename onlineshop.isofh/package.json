@@ -49,7 +49,7 @@
     "react-owl-carousel2": "^0.3.0",
     "react-redux": "^5.0.7",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "2.1.5",
+    "react-scripts": "5.0.1",
     "react-select": "^2.4.2",
     "react-share": "^3.0.1",
     "react-tagsinput": "^3.19.0",
